@@ -1,0 +1,317 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "IBGE Localidades API",
+    "version": "1.0.0",
+    "description": "Especificação OpenAPI mínima para a API de Localidades do IBGE (municipios, estados, regiões, etc.)."
+  },
+  "externalDocs": {
+    "description": "Documentação oficial (humana) do IBGE - Localidades",
+    "url": "https://servicodados.ibge.gov.br/api/docs/localidades"
+  },
+  "servers": [
+    {
+      "url": "https://servicodados.ibge.gov.br"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Municipios"
+    },
+    {
+      "name": "Estados"
+    },
+    {
+      "name": "Regioes"
+    },
+    {
+      "name": "Mesorregioes"
+    },
+    {
+      "name": "Microrregioes"
+    },
+    {
+      "name": "Distritos"
+    }
+  ],
+  "paths": {
+    "/api/v1/localidades/municipios": {
+      "get": {
+        "tags": [
+          "Municipios"
+        ],
+        "summary": "Lista todos os municípios",
+        "parameters": [
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "Ordenação (ex.: nome)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "nome",
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de municípios",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Municipio"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/localidades/municipios/{id}": {
+      "get": {
+        "tags": [
+          "Municipios"
+        ],
+        "summary": "Detalhes de um município por ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Município",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Municipio"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Não encontrado"
+          }
+        }
+      }
+    },
+    "/api/v1/localidades/estados": {
+      "get": {
+        "tags": [
+          "Estados"
+        ],
+        "summary": "Lista todos os estados (UFs)",
+        "parameters": [
+          {
+            "name": "orderBy",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "nome",
+                "sigla",
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de estados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Estado"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/localidades/estados/{uf}": {
+      "get": {
+        "tags": [
+          "Estados"
+        ],
+        "summary": "Detalhes de um estado por sigla ou ID",
+        "parameters": [
+          {
+            "name": "uf",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Estado"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Não encontrado"
+          }
+        }
+      }
+    },
+    "/api/v1/localidades/estados/{uf}/municipios": {
+      "get": {
+        "tags": [
+          "Municipios",
+          "Estados"
+        ],
+        "summary": "Lista municípios de uma UF (sigla ou ID)",
+        "parameters": [
+          {
+            "name": "uf",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "nome",
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de municípios da UF",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Municipio"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/localidades/regioes": {
+      "get": {
+        "tags": [
+          "Regioes"
+        ],
+        "summary": "Lista regiões",
+        "responses": {
+          "200": {
+            "description": "Lista de regiões",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Regiao"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Regiao": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "sigla": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "Estado": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "sigla": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "regiao": {
+            "$ref": "#/components/schemas/Regiao"
+          }
+        },
+        "additionalProperties": true
+      },
+      "Municipio": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "microrregiao": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}
