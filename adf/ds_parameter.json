@@ -1,0 +1,8 @@
+{
+  "properties": {
+    "linkedServiceName": { "referenceName": "srvsqlgspprd", "type": "LinkedServiceReference" },
+    "type": "AzureSqlTable",
+    "schema": [],
+    "typeProperties": { "tableName": "[parameter].[ingestoes]" }
+  }
+}

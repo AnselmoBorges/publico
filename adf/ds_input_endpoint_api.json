@@ -1,0 +1,10 @@
+{
+  "properties": {
+    "linkedServiceName": { "referenceName": "ls_http_dynamic", "type": "LinkedServiceReference" },
+    "parameters": { "p_api_url": {"type":"String"}, "p_endpoint": {"type":"String"} },
+    "type": "HttpFile",
+    "typeProperties": {
+      "relativeUrl": "@{dataset().p_endpoint}"
+    }
+  }
+}
