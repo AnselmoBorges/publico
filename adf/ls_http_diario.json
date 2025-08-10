@@ -1,0 +1,10 @@
+{
+  "properties": {
+    "type": "HttpServer",
+    "typeProperties": {
+      "url": "https://api.diariodeobra.app",
+      "authenticationType": "Anonymous",
+      "enableServerCertificateValidation": true
+    }
+  }
+}

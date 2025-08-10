@@ -1,0 +1,97 @@
+{
+  "name": "ingestao_diario_kv",
+  "properties": {
+    "description": "Ingestão Diário de Obras com token via Key Vault, datasets parametrizados e gravação em ADLS Gen2",
+    "variables": { "v_diario_token": { "type": "String" } },
+    "activities": [
+      {
+        "name": "Get_Diario_Token",
+        "type": "WebActivity",
+        "typeProperties": {
+          "url": "https://akvgspprd.vault.azure.net/secrets/diario-de-obras-token?api-version=7.4",
+          "method": "GET",
+          "authentication": { "type": "MSI" }
+        },
+        "policy": { "timeout": "0.00:02:00", "retry": 1, "retryIntervalInSeconds": 15 }
+      },
+      {
+        "name": "Set_Diario_Token",
+        "type": "SetVariable",
+        "dependsOn": [ { "activity": "Get_Diario_Token", "dependencyConditions": [ "Succeeded" ] } ],
+        "typeProperties": {
+          "variableName": "v_diario_token",
+          "value": { "type": "Expression", "value": "@coalesce(activity('Get_Diario_Token').output.body.value, activity('Get_Diario_Token').output.value)" }
+        }
+      },
+      {
+        "name": "Lookup_API_Params",
+        "type": "Lookup",
+        "dependsOn": [ { "activity": "Set_Diario_Token", "dependencyConditions": [ "Succeeded" ] } ],
+        "typeProperties": {
+          "source": {
+            "type": "AzureSqlSource",
+            "sqlReaderQuery": "SELECT source_system, schema_name, table_name, api_url, endpoint FROM parameter.ingestoes WHERE is_active = 1 AND source_system = 'api' ORDER BY priority, table_name",
+            "queryTimeout": "02:00:00",
+            "partitionOption": "None"
+          },
+          "dataset": { "referenceName": "parameter", "type": "DatasetReference" },
+          "firstRowOnly": false
+        },
+        "policy": { "timeout": "0.00:05:00", "retry": 1, "retryIntervalInSeconds": 15 }
+      },
+      {
+        "name": "ForEach_API",
+        "type": "ForEach",
+        "dependsOn": [ { "activity": "Lookup_API_Params", "dependencyConditions": [ "Succeeded" ] } ],
+        "typeProperties": {
+          "isSequential": false,
+          "batchCount": 5,
+          "items": { "type": "Expression", "value": "@activity('Lookup_API_Params').output.value" },
+          "activities": [
+            {
+              "name": "Copy_API_to_JSON",
+              "type": "Copy",
+              "typeProperties": {
+                "source": {
+                  "type": "JsonSource",
+                  "storeSettings": {
+                    "type": "HttpReadSettings",
+                    "requestMethod": "GET",
+                    "additionalHeaders": {
+                      "Authorization": { "type": "Expression", "value": "@concat('Bearer ', variables('v_diario_token'))" }
+                    }
+                  },
+                  "formatSettings": { "type": "JsonReadSettings" }
+                },
+                "sink": { "type": "JsonSink", "storeSettings": { "type": "AzureBlobFSWriteSettings" }, "formatSettings": { "type": "JsonWriteSettings" } },
+                "enableStaging": false
+              },
+              "inputs": [
+                {
+                  "referenceName": "input_endpoint_api",
+                  "type": "DatasetReference",
+                  "parameters": {
+                    "p_api_url": { "type": "Expression", "value": "@item().api_url" },
+                    "p_endpoint": { "type": "Expression", "value": "@item().endpoint" }
+                  }
+                }
+              ],
+              "outputs": [
+                {
+                  "referenceName": "output_endpoint_api",
+                  "type": "DatasetReference",
+                  "parameters": {
+                    "p_source": { "type": "Expression", "value": "@item().source_system" },
+                    "p_schema": { "type": "Expression", "value": "@item().schema_name" },
+                    "p_table": { "type": "Expression", "value": "@item().table_name" }
+                  }
+                }
+              ],
+              "policy": { "timeout": "0.00:20:00", "retry": 2, "retryIntervalInSeconds": 30 }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
