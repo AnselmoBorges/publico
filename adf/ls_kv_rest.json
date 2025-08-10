@@ -1,0 +1,10 @@
+{
+  "properties": {
+    "type": "RestService",
+    "typeProperties": {
+      "url": "https://akvgspprd.vault.azure.net",
+      "enableServerCertificateValidation": true,
+      "authenticationType": "ManagedServiceIdentity"
+    }
+  }
+}
