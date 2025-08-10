@@ -1,0 +1,76 @@
+{
+  "openapi": "3.0.3",
+  "info": { "title": "Diário de Obras API", "version": "1.0.0" },
+  "servers": [{ "url": "https://api.diariodeobra.app" }],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" }
+    }
+  },
+  "security": [{ "bearerAuth": [] }],
+  "paths": {
+    "/empresa": {
+      "get": {
+        "summary": "Detalhes da empresa",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object", "additionalProperties": true }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cadastros": {
+      "get": {
+        "summary": "Listas de cadastros (usuários, grupos, modelos, etc.)",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object", "additionalProperties": true }
+              }
+            }
+          }
+        }
+      }
+    }    ,
+    "/obras": {
+      "get": {
+        "summary": "Listagem de obras",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "type": "object", "additionalProperties": true } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/obras/{id}": {
+      "get": {
+        "summary": "Detalhe da obra",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object", "additionalProperties": true }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
