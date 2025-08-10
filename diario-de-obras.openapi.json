@@ -1,78 +1,203 @@
 {
   "openapi": "3.0.3",
-  "info": { "title": "Diário de Obras API", "version": "1.0.0" },
-  "servers": [{ "url": "https://api.diariodeobra.app" }],
+  "info": {
+    "title": "Diário de Obras API",
+    "version": "1.0.0",
+    "description": "Catálogo mínimo dos principais endpoints públicos do Diário de Obras para ingestão no OpenMetadata.\n\nEste arquivo não representa a especificação oficial do fornecedor. Foi construído a partir de exemplos reais, para fins de documentação e descoberta de endpoints no catálogo.",
+    "contact": {
+      "name": "GSP Loteamentos - Dados",
+      "url": "https://gsp.com.br",
+      "email": "dados@gsp.com.br"
+    }
+  },
+  "externalDocs": {
+    "description": "Documentação do App (UI)",
+    "url": "https://api.diariodeobra.app/documentacao/"
+  },
+  "servers": [
+    { "url": "https://api.diariodeobra.app", "description": "Servidor principal" }
+  ],
+  "tags": [
+    { "name": "empresa", "description": "Informações institucionais da empresa" },
+    { "name": "cadastros", "description": "Listas de apoio utilizadas no app" },
+    { "name": "obras", "description": "Consulta de obras e seus detalhes" }
+  ],
   "components": {
     "securitySchemes": {
       "bearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" }
+    },
+    "schemas": {
+      "Empresa": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "nome": { "type": "string" },
+          "razaoSocial": { "type": "string" },
+          "cpfCnpj": { "type": "string" },
+          "logoUrl": { "type": "string", "format": "uri" },
+          "log": {
+            "type": "object",
+            "properties": {
+              "totalObras": { "type": "integer" },
+              "totalUsuarios": { "type": "integer" },
+              "totalRelatorios": { "type": "integer" },
+              "totalFotos": { "type": "integer" },
+              "totalAnexos": { "type": "integer" },
+              "totalAnexosObra": { "type": "integer" },
+              "totalVideos": { "type": "integer" },
+              "armazenamentoTotal": { "type": "integer" },
+              "ultimoAcesso": { "type": "string" },
+              "ultimoRelatorio": { "type": "string" }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true,
+        "example": {
+          "_id": "57fa4eebffd18769058b4567",
+          "nome": "Update Construções",
+          "razaoSocial": "UPDATE DIGITAL TECNOLOGIA DA INFORMAÇÃO LTDA",
+          "cpfCnpj": "21.600.669/0001-94",
+          "logoUrl": "https://.../logomarca_01_54968_20220930_141358.jpg",
+          "log": {
+            "totalObras": 8,
+            "totalUsuarios": 6,
+            "totalRelatorios": 121,
+            "totalFotos": 149,
+            "totalAnexos": 15,
+            "totalAnexosObra": 27,
+            "totalVideos": 7,
+            "armazenamentoTotal": 78818670,
+            "ultimoAcesso": "01/01/2023 00:00:00",
+            "ultimoRelatorio": "01/01/2023 00:00:00"
+          }
+        }
+      },
+      "Obra": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "nome": { "type": "string" },
+          "fotoUrl": { "type": "string", "nullable": true },
+          "status": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "descricao": { "type": "string" }
+            },
+            "additionalProperties": false
+          },
+          "totalRelatorios": { "type": "integer" },
+          "totalFotos": { "type": "integer" },
+          "modified": { "type": "string" }
+        },
+        "additionalProperties": true,
+        "example": {
+          "_id": "5c4f206f33e3821f9e559902",
+          "nome": "Casa Ana Laura",
+          "fotoUrl": "https://.../miniatura/image_78201_20220520_145119.jpg",
+          "status": { "id": 3, "descricao": "Em Andamento" },
+          "totalRelatorios": 35,
+          "totalFotos": 23,
+          "modified": "01/01/2023 00:00:00"
+        }
+      },
+      "Cadastros": {
+        "type": "object",
+        "description": "Estruturas de listas utilizadas no app. Mantido flexível para acomodar variações.",
+        "additionalProperties": true,
+        "example": {
+          "usuarios": [
+            {
+              "_id": "5be1e2bd15c59759156be622",
+              "nome": "Tiago Oliveira",
+              "cargo": "Gerente",
+              "email": "tiago.oliveira@diariodeobras.net",
+              "perfil": { "id": 1, "descricao": "Administrador" },
+              "ativo": true
+            }
+          ],
+          "statusObra": [ { "id": 3, "descricao": "Em Andamento" } ],
+          "statusRelatorio": [ { "id": 4, "descricao": "Aprovado" } ]
+        }
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Token inválido ou ausente"
+      }
+    },
+    "parameters": {
+      "ObraId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" },
+        "description": "Identificador da obra"
+      }
     }
   },
   "security": [{ "bearerAuth": [] }],
   "paths": {
     "/empresa": {
       "get": {
+        "tags": ["empresa"],
         "summary": "Detalhes da empresa",
+        "description": "Retorna informações institucionais e métricas agregadas da empresa.",
         "operationId": "getEmpresa",
         "responses": {
           "200": {
             "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": { "type": "object", "additionalProperties": true }
-              }
-            }
-          }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Empresa" } } }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
         }
       }
     },
     "/cadastros": {
       "get": {
-        "summary": "Listas de cadastros (usuários, grupos, modelos, etc.)",
+        "tags": ["cadastros"],
+        "summary": "Listas de cadastros",
+        "description": "Retorna listas auxiliares como usuários, grupos, modelos, mão de obra, equipamentos, tipos de ocorrências e status.",
         "operationId": "getCadastros",
         "responses": {
           "200": {
             "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": { "type": "object", "additionalProperties": true }
-              }
-            }
-          }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Cadastros" } } }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
         }
       }
     },
     "/obras": {
       "get": {
+        "tags": ["obras"],
         "summary": "Listagem de obras",
+        "description": "Retorna a lista de obras com status e totais.",
         "operationId": "listObras",
         "responses": {
           "200": {
             "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": { "type": "array", "items": { "type": "object", "additionalProperties": true } }
-              }
-            }
-          }
+            "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Obra" } } } }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
         }
       }
     },
     "/obras/{id}": {
       "get": {
+        "tags": ["obras"],
         "summary": "Detalhe da obra",
+        "description": "Retorna os detalhes de uma obra específica.",
         "operationId": "getObraById",
-        "parameters": [
-          { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
-        ],
+        "parameters": [ { "$ref": "#/components/parameters/ObraId" } ],
         "responses": {
           "200": {
             "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": { "type": "object", "additionalProperties": true }
-              }
-            }
-          }
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Obra" } } }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "description": "Obra não encontrada" }
         }
       }
     }
