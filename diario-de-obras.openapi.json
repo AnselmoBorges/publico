@@ -12,6 +12,7 @@
     "/empresa": {
       "get": {
         "summary": "Detalhes da empresa",
+        "operationId": "getEmpresa",
         "responses": {
           "200": {
             "description": "OK",
@@ -27,6 +28,7 @@
     "/cadastros": {
       "get": {
         "summary": "Listas de cadastros (usuários, grupos, modelos, etc.)",
+        "operationId": "getCadastros",
         "responses": {
           "200": {
             "description": "OK",
@@ -38,10 +40,11 @@
           }
         }
       }
-    }    ,
+    },
     "/obras": {
       "get": {
         "summary": "Listagem de obras",
+        "operationId": "listObras",
         "responses": {
           "200": {
             "description": "OK",
@@ -57,6 +60,7 @@
     "/obras/{id}": {
       "get": {
         "summary": "Detalhe da obra",
+        "operationId": "getObraById",
         "parameters": [
           { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }
         ],
