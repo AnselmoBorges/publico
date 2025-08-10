@@ -1,70 +1,1234 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Prevision API (GraphQL)",
+    "title": "Prevision API (GraphQL via virtual endpoints)",
     "version": "1.0.0",
-    "description": "Especificação mínima para catalogação no OpenMetadata. Representa o endpoint GraphQL da Prevision como uma rota REST única (POST /graphql) com exemplos de queries e mutations.",
-    "contact": { "name": "GSP Loteamentos - Dados", "email": "dados@gsp.com.br" }
+    "description": "OpenAPI gerado automaticamente a partir da coleção Postman. Cada operação GraphQL vira um endpoint REST virtual que publica no /graphql."
   },
   "externalDocs": {
-    "description": "Documentação pública / Postman",
+    "description": "Postman",
     "url": "https://documenter.getpostman.com/view/5656281/2s9YCBsoav"
   },
   "servers": [
-    { "url": "https://api.prevision.com.br", "description": "Servidor principal (ajuste se necessário)" }
+    {
+      "url": "https://api.prevision.com.br"
+    }
   ],
-  "tags": [ { "name": "graphql", "description": "Operações via GraphQL" } ],
   "components": {
     "securitySchemes": {
-      "bearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" }
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     },
     "schemas": {
       "GraphQLRequest": {
         "type": "object",
         "properties": {
-          "query": { "type": "string" },
-          "variables": { "type": "object", "additionalProperties": true },
-          "operationName": { "type": "string" }
+          "query": {
+            "type": "string"
+          },
+          "variables": {
+            "type": "object"
+          },
+          "operationName": {
+            "type": "string"
+          }
         },
-        "required": ["query"],
-        "example": {
-          "query": "query Projects($first:Int!){ projects(first:$first){ edges{ node{ id name } } } }",
-          "variables": { "first": 10 },
-          "operationName": "Projects"
-        }
+        "required": [
+          "query"
+        ]
       },
       "GraphQLResponse": {
         "type": "object",
         "properties": {
-          "data": { "type": "object", "additionalProperties": true },
+          "data": {
+            "type": "object"
+          },
           "errors": {
             "type": "array",
-            "items": { "type": "object", "additionalProperties": true }
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/graphql/geral/falha_de_autentica__o": {
+      "post": {
+        "tags": [
+          "Geral"
+        ],
+        "summary": "Falha de autenticação",
+        "description": "Origem: Geral / Falha de autenticação",
+        "operationId": "Geral_Falha_de_autentica__o",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
     },
-    "responses": {
-      "Unauthorized": { "description": "Token inválido ou ausente" }
-    }
-  },
-  "security": [ { "bearerAuth": [] } ],
-  "paths": {
-    "/graphql": {
+    "/graphql/geral/ordenamento": {
       "post": {
-        "tags": ["graphql"],
-        "summary": "Executa consultas e mutations GraphQL",
-        "description": "Encaminha o JSON GraphQL (query, variables, operationName) ao endpoint GraphQL da Prevision.",
-        "operationId": "executeGraphQL",
+        "tags": [
+          "Geral"
+        ],
+        "summary": "Ordenamento",
+        "description": "Origem: Geral / Ordenamento",
+        "operationId": "Geral_Ordenamento",
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": { "schema": { "$ref": "#/components/schemas/GraphQLRequest" } }
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
           }
         },
         "responses": {
-          "200": { "description": "OK", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/GraphQLResponse" } } } },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/geral/pagina__o": {
+      "post": {
+        "tags": [
+          "Geral"
+        ],
+        "summary": "Paginação",
+        "description": "Origem: Geral / Paginação",
+        "operationId": "Geral_Pagina__o",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/projetos/lista_de_projetos": {
+      "post": {
+        "tags": [
+          "Projetos"
+        ],
+        "summary": "Lista de Projetos",
+        "description": "Origem: Projetos / Lista de Projetos",
+        "operationId": "Projetos_Lista_de_Projetos",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/cronograma/lista_de_lotes__atividades__pacotes_e_servi_os": {
+      "post": {
+        "tags": [
+          "Cronograma"
+        ],
+        "summary": "Lista de Lotes, Atividades, Pacotes e Serviços",
+        "description": "Origem: Cronograma / Lista de Lotes, Atividades, Pacotes e Serviços",
+        "operationId": "Cronograma_Lista_de_Lotes__Atividades__Pacotes_e_Servi_os",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/cronograma/atividades_do_cronograma_e_seus_respons_veis": {
+      "post": {
+        "tags": [
+          "Cronograma"
+        ],
+        "summary": "Atividades do Cronograma e seus Responsáveis",
+        "description": "Origem: Cronograma / Atividades do Cronograma e seus Responsáveis",
+        "operationId": "Cronograma_Atividades_do_Cronograma_e_seus_Respons_veis",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/cronograma/respons_veis": {
+      "post": {
+        "tags": [
+          "Cronograma"
+        ],
+        "summary": "Responsáveis",
+        "description": "Origem: Cronograma / Responsáveis",
+        "operationId": "Cronograma_Respons_veis",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/cronograma/cronograma_com_unidades_de_medida": {
+      "post": {
+        "tags": [
+          "Cronograma"
+        ],
+        "summary": "Cronograma com Unidades de Medida",
+        "description": "Origem: Cronograma / Cronograma com Unidades de Medida",
+        "operationId": "Cronograma_Cronograma_com_Unidades_de_Medida",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/cronograma/vers_es": {
+      "post": {
+        "tags": [
+          "Cronograma"
+        ],
+        "summary": "Versões",
+        "description": "Origem: Cronograma / Versões",
+        "operationId": "Cronograma_Vers_es",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/cronograma/linha_de_base": {
+      "post": {
+        "tags": [
+          "Cronograma"
+        ],
+        "summary": "Linha de base",
+        "description": "Origem: Cronograma / Linha de base",
+        "operationId": "Cronograma_Linha_de_base",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/cronograma/predecessores_e_sucessores": {
+      "post": {
+        "tags": [
+          "Cronograma"
+        ],
+        "summary": "Predecessores e Sucessores",
+        "description": "Origem: Cronograma / Predecessores e Sucessores",
+        "operationId": "Cronograma_Predecessores_e_Sucessores",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/cronograma/lista_de_respons_veis": {
+      "post": {
+        "tags": [
+          "Cronograma"
+        ],
+        "summary": "Lista de Responsáveis",
+        "description": "Origem: Cronograma / Lista de Responsáveis",
+        "operationId": "Cronograma_Lista_de_Respons_veis",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/cronograma/metas": {
+      "post": {
+        "tags": [
+          "Cronograma"
+        ],
+        "summary": "Metas",
+        "description": "Origem: Cronograma / Metas",
+        "operationId": "Cronograma_Metas",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/or_amento/lista_de_or_amentos": {
+      "post": {
+        "tags": [
+          "Orçamento"
+        ],
+        "summary": "Lista de orçamentos",
+        "description": "Origem: Orçamento / Lista de orçamentos",
+        "operationId": "Or_amento_Lista_de_or_amentos",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/or_amento/pesos_do_or_amento": {
+      "post": {
+        "tags": [
+          "Orçamento"
+        ],
+        "summary": "Pesos do Orçamento",
+        "description": "Origem: Orçamento / Pesos do Orçamento",
+        "operationId": "Or_amento_Pesos_do_Or_amento",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/or_amento/categorias_e_nodos": {
+      "post": {
+        "tags": [
+          "Orçamento"
+        ],
+        "summary": "Categorias e nodos",
+        "description": "Origem: Orçamento / Categorias e nodos",
+        "operationId": "Or_amento_Categorias_e_nodos",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/or_amento/or_amentos_com_libera__o_de_contrato": {
+      "post": {
+        "tags": [
+          "Orçamento"
+        ],
+        "summary": "Orçamentos com liberação de contrato",
+        "description": "Origem: Orçamento / Orçamentos com liberação de contrato",
+        "operationId": "Or_amento_Or_amentos_com_libera__o_de_contrato",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/padr_o/dashboard_padr_o___detalhes___curva_s___evolu__o_mensal___evolu_": {
+      "post": {
+        "tags": [
+          "Padrão"
+        ],
+        "summary": "Dashboard Padrão / Detalhes / Curva S / Evolução Mensal / Evolução por Pacote e Serviço",
+        "description": "Origem: Dashboards / Padrão / Dashboard Padrão / Detalhes / Curva S / Evolução Mensal / Evolução por Pacote e Serviço",
+        "operationId": "Padr_o_Dashboard_Padr_o___Detalhes___Curva_S___Evolu__o_Mensal__",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/padr_o/informa__es_gerais_do_projeto": {
+      "post": {
+        "tags": [
+          "Padrão"
+        ],
+        "summary": "Informações Gerais do Projeto",
+        "description": "Origem: Dashboards / Padrão / Informações Gerais do Projeto",
+        "operationId": "Padr_o_Informa__es_Gerais_do_Projeto",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/padr_o/progresso_mensal": {
+      "post": {
+        "tags": [
+          "Padrão"
+        ],
+        "summary": "Progresso Mensal",
+        "description": "Origem: Dashboards / Padrão / Progresso Mensal",
+        "operationId": "Padr_o_Progresso_Mensal",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/padr_o/evolu__o_por_pacote_de_trabalho": {
+      "post": {
+        "tags": [
+          "Padrão"
+        ],
+        "summary": "Evolução por Pacote de Trabalho",
+        "description": "Origem: Dashboards / Padrão / Evolução por Pacote de Trabalho",
+        "operationId": "Padr_o_Evolu__o_por_Pacote_de_Trabalho",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/padr_o/evolu__o_por_lote": {
+      "post": {
+        "tags": [
+          "Padrão"
+        ],
+        "summary": "Evolução por Lote",
+        "description": "Origem: Dashboards / Padrão / Evolução por Lote",
+        "operationId": "Padr_o_Evolu__o_por_Lote",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/padr_o/cff__cronograma_f_sico_financeiro_": {
+      "post": {
+        "tags": [
+          "Padrão"
+        ],
+        "summary": "CFF (Cronograma Físico-Financeiro)",
+        "description": "Origem: Dashboards / Padrão / CFF (Cronograma Físico-Financeiro)",
+        "operationId": "Padr_o_CFF__Cronograma_F_sico_Financeiro_",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/padr_o/cff__cronograma_f_sico_financeiro__com_atividades_e_servi_os": {
+      "post": {
+        "tags": [
+          "Padrão"
+        ],
+        "summary": "CFF (Cronograma Físico-Financeiro) com Atividades e Serviços",
+        "description": "Origem: Dashboards / Padrão / CFF (Cronograma Físico-Financeiro) com Atividades e Serviços",
+        "operationId": "Padr_o_CFF__Cronograma_F_sico_Financeiro__com_Atividades_e_Servi",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/padr_o/cf__cronograma_f_sico_": {
+      "post": {
+        "tags": [
+          "Padrão"
+        ],
+        "summary": "CF (Cronograma Físico)",
+        "description": "Origem: Dashboards / Padrão / CF (Cronograma Físico)",
+        "operationId": "Padr_o_CF__Cronograma_F_sico_",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/dashboards/dashboard_states": {
+      "post": {
+        "tags": [
+          "Dashboards"
+        ],
+        "summary": "Dashboard States",
+        "description": "Origem: Dashboards / Dashboard States",
+        "operationId": "Dashboards_Dashboard_States",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/medi__es/_ltima_medi__o": {
+      "post": {
+        "tags": [
+          "Medições"
+        ],
+        "summary": "Última Medição",
+        "description": "Origem: Medições / Última Medição",
+        "operationId": "Medi__es__ltima_Medi__o",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/medi__es/lista_de_medi__es": {
+      "post": {
+        "tags": [
+          "Medições"
+        ],
+        "summary": "Lista de medições",
+        "description": "Origem: Medições / Lista de medições",
+        "operationId": "Medi__es_Lista_de_medi__es",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/medi__es/detalhes_da__ltima_medi__o": {
+      "post": {
+        "tags": [
+          "Medições"
+        ],
+        "summary": "Detalhes da última medição",
+        "description": "Origem: Medições / Detalhes da última medição",
+        "operationId": "Medi__es_Detalhes_da__ltima_medi__o",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/graphql/restri__es/colunas_e_tarefas_do_kanban": {
+      "post": {
+        "tags": [
+          "Restrições"
+        ],
+        "summary": "Colunas e tarefas do Kanban",
+        "description": "Origem: Restrições / Colunas e tarefas do Kanban",
+        "operationId": "Restri__es_Colunas_e_tarefas_do_Kanban",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GraphQLRequest"
+              },
+              "example": {
+                "query": "",
+                "variables": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GraphQLResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
         }
       }
     }
