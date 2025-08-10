@@ -2,31 +2,10 @@
   "name": "ingestao_diario_kv",
   "properties": {
     "description": "Ingestão Diário de Obras com token via Key Vault, datasets parametrizados e gravação em ADLS Gen2",
-    "variables": { "v_diario_token": { "type": "String" } },
     "activities": [
-      {
-        "name": "Get_Diario_Token",
-        "type": "WebActivity",
-        "typeProperties": {
-          "url": "https://akvgspprd.vault.azure.net/secrets/diario-de-obras-token?api-version=7.4",
-          "method": "GET",
-          "authentication": { "type": "MSI" }
-        },
-        "policy": { "timeout": "0.00:02:00", "retry": 1, "retryIntervalInSeconds": 15 }
-      },
-      {
-        "name": "Set_Diario_Token",
-        "type": "SetVariable",
-        "dependsOn": [ { "activity": "Get_Diario_Token", "dependencyConditions": [ "Succeeded" ] } ],
-        "typeProperties": {
-          "variableName": "v_diario_token",
-          "value": { "type": "Expression", "value": "@coalesce(activity('Get_Diario_Token').output.body.value, activity('Get_Diario_Token').output.value)" }
-        }
-      },
       {
         "name": "Lookup_API_Params",
         "type": "Lookup",
-        "dependsOn": [ { "activity": "Set_Diario_Token", "dependencyConditions": [ "Succeeded" ] } ],
         "typeProperties": {
           "source": {
             "type": "AzureSqlSource",
@@ -58,7 +37,7 @@
                     "type": "HttpReadSettings",
                     "requestMethod": "GET",
                     "additionalHeaders": {
-                      "Authorization": { "type": "Expression", "value": "@concat('Bearer ', variables('v_diario_token'))" }
+                      "Authorization": { "type": "Expression", "value": "@concat('Bearer ', dataset().p_token)" }
                     }
                   },
                   "formatSettings": { "type": "JsonReadSettings" }
@@ -71,8 +50,12 @@
                   "referenceName": "input_endpoint_api",
                   "type": "DatasetReference",
                   "parameters": {
-                    "p_api_url": { "type": "Expression", "value": "@item().api_url" },
-                    "p_endpoint": { "type": "Expression", "value": "@item().endpoint" }
+                    "p_endpoint": { "type": "Expression", "value": "@item().endpoint" },
+                    "p_token": {
+                      "type": "AzureKeyVaultSecret",
+                      "store": { "referenceName": "akvgspprd", "type": "LinkedServiceReference" },
+                      "secretName": "diario-de-obras-token"
+                    }
                   }
                 }
               ],

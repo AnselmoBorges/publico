@@ -1,7 +1,10 @@
 {
   "properties": {
     "linkedServiceName": { "referenceName": "ls_http_diario", "type": "LinkedServiceReference" },
-    "parameters": { "p_endpoint": {"type":"String"} },
+    "parameters": {
+      "p_endpoint": {"type":"String"},
+      "p_token": {"type":"SecureString"}
+    },
     "type": "HttpFile",
     "typeProperties": {
       "relativeUrl": "@{dataset().p_endpoint}"
