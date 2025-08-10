@@ -1,0 +1,11 @@
+[project]
+name = "gsp-adf-source"
+version = "0.1.0"
+description = "Custom OpenMetadata source for Azure Data Factory"
+authors = [{name="GSP Dados"}]
+requires-python = ">=3.9"
+dependencies = ["requests>=2.31.0"]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
