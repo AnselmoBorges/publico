@@ -1,15 +1,1 @@
-{
-  "properties": {
-    "linkedServiceName": { "referenceName": "sagsprd", "type": "LinkedServiceReference" },
-    "parameters": { "p_source": {"type":"String"}, "p_schema": {"type":"String"}, "p_table": {"type":"String"} },
-    "type": "Json",
-    "typeProperties": {
-      "location": {
-        "type": "AzureBlobFSLocation",
-        "fileSystem": "staging",
-        "folderPath": "@{concat(dataset().p_source,'/',dataset().p_schema,'/',dataset().p_table)}",
-        "fileName": "@{concat(dataset().p_table,'_',utcnow('yyyyMMdd_HHmmss'),'.json')}"
-      }
-    }
-  }
-}
+{"name":"output_endpoint_api","properties":{"linkedServiceName":{"referenceName":"sagsprd","type":"LinkedServiceReference"},"parameters":{"p_source":{"type":"String"},"p_schema":{"type":"String"},"p_table":{"type":"String"}},"type":"Json","typeProperties":{"location":{"type":"AzureBlobFSLocation","fileSystem":"staging","folderPath":{"type":"Expression","value":"@concat(dataset().p_source,'/',dataset().p_schema,'/',dataset().p_table)"},"fileName":{"type":"Expression","value":"@concat(dataset().p_table,'_',utcNow('yyyyMMdd_HHmmss'),'.json')"}}},"folder":{"name":"API"},"annotations":[]}}

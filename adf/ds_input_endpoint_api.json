@@ -1,13 +1,1 @@
-{
-  "properties": {
-    "linkedServiceName": { "referenceName": "ls_http_diario", "type": "LinkedServiceReference" },
-    "parameters": {
-      "p_endpoint": {"type":"String"},
-      "p_token": {"type":"SecureString"}
-    },
-    "type": "HttpFile",
-    "typeProperties": {
-      "relativeUrl": "@{dataset().p_endpoint}"
-    }
-  }
-}
+{"name":"input_endpoint_api","properties":{"description":"Dataset API universal - teste com AKV","linkedServiceName":{"referenceName":"apirequest","type":"LinkedServiceReference","parameters":{"p_base_url":{"type":"Expression","value":"@dataset().p_api_url"}}},"parameters":{"p_api_url":{"type":"String"},"p_endpoint":{"type":"String"},"p_header_scheme":{"type":"String","defaultValue":"Bearer"},"p_token":{"type":"SecureString"}},"folder":{"name":"API"},"annotations":[],"type":"HttpFile","typeProperties":{"relativeUrl":{"type":"Expression","value":"@dataset().p_endpoint"},"additionalHeaders":{"Authorization":{"type":"Expression","value":"@iif(empty(dataset().p_token),'', concat(dataset().p_header_scheme, ' ', dataset().p_token))"}}},"schema":[]}}
