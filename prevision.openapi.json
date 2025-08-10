@@ -1,0 +1,72 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Prevision API (GraphQL)",
+    "version": "1.0.0",
+    "description": "Especificação mínima para catalogação no OpenMetadata. Representa o endpoint GraphQL da Prevision como uma rota REST única (POST /graphql) com exemplos de queries e mutations.",
+    "contact": { "name": "GSP Loteamentos - Dados", "email": "dados@gsp.com.br" }
+  },
+  "externalDocs": {
+    "description": "Documentação pública / Postman",
+    "url": "https://documenter.getpostman.com/view/5656281/2s9YCBsoav"
+  },
+  "servers": [
+    { "url": "https://api.prevision.com.br", "description": "Servidor principal (ajuste se necessário)" }
+  ],
+  "tags": [ { "name": "graphql", "description": "Operações via GraphQL" } ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" }
+    },
+    "schemas": {
+      "GraphQLRequest": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string" },
+          "variables": { "type": "object", "additionalProperties": true },
+          "operationName": { "type": "string" }
+        },
+        "required": ["query"],
+        "example": {
+          "query": "query Projects($first:Int!){ projects(first:$first){ edges{ node{ id name } } } }",
+          "variables": { "first": 10 },
+          "operationName": "Projects"
+        }
+      },
+      "GraphQLResponse": {
+        "type": "object",
+        "properties": {
+          "data": { "type": "object", "additionalProperties": true },
+          "errors": {
+            "type": "array",
+            "items": { "type": "object", "additionalProperties": true }
+          }
+        }
+      }
+    },
+    "responses": {
+      "Unauthorized": { "description": "Token inválido ou ausente" }
+    }
+  },
+  "security": [ { "bearerAuth": [] } ],
+  "paths": {
+    "/graphql": {
+      "post": {
+        "tags": ["graphql"],
+        "summary": "Executa consultas e mutations GraphQL",
+        "description": "Encaminha o JSON GraphQL (query, variables, operationName) ao endpoint GraphQL da Prevision.",
+        "operationId": "executeGraphQL",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/GraphQLRequest" } }
+          }
+        },
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/GraphQLResponse" } } } },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    }
+  }
+}
